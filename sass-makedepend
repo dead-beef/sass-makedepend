@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+const path = require('path');
+const sassgraph = require('sass-graph');
+
+const PWD = process.cwd();
+
+const relPath = (p) => path.relative(PWD, p);
+const stripExt = (p) => p.replace(/\.[^\/.]*$/, '');
+
+function makedepend(file, options) {
+	let prefix;
+	let suffix = options.suffix || '.css';
+
+	if(typeof options.prefix === 'string') {
+		prefix = options.prefix;
+	}
+	else {
+		prefix = path.dirname(file) + '/';
+	}
+
+	let target = prefix.concat(stripExt(path.basename(file)), suffix, ': ');
+
+	let deps = sassgraph.parseFile(file, options.sassGraph);
+	deps = Object.keys(deps.index);
+	if(options.ignore) {
+		deps = deps.filter((dep) => !options.ignore.test(dep));
+	}
+	if(options.relative) {
+		deps = deps.map(relPath);
+	}
+
+	return target + deps.join(' ');
+}
+
+const program = require('commander')
+	.version('0.1.0')
+	.arguments('<file...>')
+	.option(
+		'-I, --load-path <paths>',
+		'sass load paths separated with ":" (default: "./node_modules")',
+		(s) => s.length ? s.split(':') : [],
+		['./node_modules']
+	)
+	.option(
+		'-p, --prefix <prefix>',
+		'target file prefix (default: dirname(file) + "/")'
+	)
+	.option(
+		'-o, --suffix <suffix>',
+		'target file suffix (default: ".css")',
+		'.css'
+	)
+	.option(
+		'-i, --ignore <regexp>',
+		'ignore dependencies with absolute path matching <regexp>',
+		(s) => s.length ? new RegExp(s) : undefined
+	)
+	.option(
+		'-r, --relative',
+		'output dependency paths relative to current directory'
+	)
+	.parse(process.argv);
+
+if(!program.args.length) {
+	program.help();
+}
+
+program.sassGraph = {
+	loadPaths: program.loadPath
+};
+
+for(let file of program.args) {
+	console.log(makedepend(file, program));
+}

@@ -1,0 +1,37 @@
+{
+  "name": "sass-makedepend",
+  "version": "0.1.0",
+  "author": "dead-beef",
+  "contributors": [],
+  "license": "MIT",
+  "private": true,
+  "description": "Makefile dependency generator for Sass",
+  "keywords": [
+    "cli",
+    "command",
+    "sass",
+    "makefile"
+  ],
+  "homepage": "https://github.com/dead-beef/sass-makedepend",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dead-beef/sass-makedepend"
+  },
+  "bugs": {
+    "url": "https://github.com/dead-beef/sass-makedepend/issues"
+  },
+  "main": "sass-makedepend",
+  "bin": {
+    "sass-makedepend": "sass-makedepend"
+  },
+  "dependencies": {
+    "commander": "^2.12.2",
+    "sass-graph": "^2.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^4.2.0"
+  },
+  "scripts": {
+    "lint": "eslint src tests"
+  }
+}
