@@ -38,6 +38,7 @@ npm install sass-makedepend
     -p, --prefix <prefix>    target file prefix (default: dirname(file) + "/")
     -o, --suffix <suffix>    target file suffix (default: ".css")
     -i, --ignore <regexp>    ignore dependencies with absolute path matching <regexp>
+    -m, --ignore-modules     ignore dependencies from module.paths
     -r, --relative           output dependency paths relative to current directory
     -h, --help               output usage information
 ```
