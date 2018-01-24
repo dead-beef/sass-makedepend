@@ -7,6 +7,7 @@ const PWD = process.cwd();
 
 const relPath = (p) => path.relative(PWD, p);
 const stripExt = (p) => p.replace(/\.[^\/.]*$/, '');
+const isNotModule = (p) => module.paths.every((mp) => !p.startsWith(mp));
 
 function makedepend(file, options) {
 	let prefix;
@@ -23,6 +24,10 @@ function makedepend(file, options) {
 
 	let deps = sassgraph.parseFile(file, options.sassGraph);
 	deps = Object.keys(deps.index);
+
+	if(options.ignoreModules) {
+		deps = deps.filter(isNotModule);
+	}
 	if(options.ignore) {
 		deps = deps.filter((dep) => !options.ignore.test(dep));
 	}
@@ -55,6 +60,10 @@ const program = require('commander')
 		'-i, --ignore <regexp>',
 		'ignore dependencies with absolute path matching <regexp>',
 		(s) => s.length ? new RegExp(s) : undefined
+	)
+	.option(
+		'-m, --ignore-modules',
+		'ignore dependencies from module.paths'
 	)
 	.option(
 		'-r, --relative',
