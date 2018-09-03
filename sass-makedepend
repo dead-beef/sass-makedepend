@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// -*- mode: js -*-
 
 const path = require('path');
 const sassgraph = require('sass-graph');
