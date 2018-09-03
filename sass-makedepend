@@ -40,7 +40,7 @@ function makedepend(file, options) {
 }
 
 const program = require('commander')
-	.version('0.2.1')
+	.version('0.2.2')
 	.arguments('<file...>')
 	.option(
 		'-I, --load-path <paths>',
